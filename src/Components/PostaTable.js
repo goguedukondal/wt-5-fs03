@@ -3,25 +3,24 @@ import axios from 'axios';
 import {Thead,Tr,Th,Tbody,Td,TableContainer,Table,Heading,Text} from '@chakra-ui/react'
 
 const API_URL = 'https://hn.algolia.com/api/v1/search_by_date?tags=story';
-
 const PostsTable = () => {
-  const [posts, setPosts] = useState([]);
+  const [data, setData] = useState([]);
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_URL}&page=${page}`);
-        const newPosts = response.data.hits;
-        console.log(newPosts)
-        setPosts(prevPosts => [...prevPosts, ...newPosts]);
+        const response = await axios.get(`https://hn.algolia.com/api/v1/search_by_date?tags=story&page=${page}`);
+        const newData = response.data.hits;
+        console.log(newData)
+        setData(prevData => [...prevData, ...newData]);
         setPage(prevPage=>prevPage+1)
       } catch (error) {
         console.error('Error fetching posts:', error);
       }
     };
 
-    const interval = setInterval(fetchPosts, 10000);
+    const interval = setInterval(fetchData, 10000);
     
       return () => clearInterval(interval);
     
@@ -47,7 +46,7 @@ const PostsTable = () => {
       </Tr>
     </Thead>
     <Tbody>
-         {posts.map(post => (
+         {data.map(post => (
           <Tr  key={post.objectID}>
             <Td>{post.title}</Td>
             <Td>
